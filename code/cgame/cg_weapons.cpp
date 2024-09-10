@@ -420,6 +420,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 
 	case WP_BRYAR_PISTOL:
 	case WP_BLASTER_PISTOL: // enemy version
+	case WP_IMP_PISTOL: // enemy version
 	case WP_JAWA:
 		cgs.effects.bryarShotEffect			= theFxScheduler.RegisterEffect( "bryar/shot" );
 											theFxScheduler.RegisterEffect( "bryar/NPCshot" );
@@ -1700,6 +1701,7 @@ void CG_AddViewWeapon( playerState_t *ps )
 	//-----------------------
 	if (( ps->weaponstate == WEAPON_CHARGING_ALT && ps->weapon == WP_BRYAR_PISTOL )
 			|| ( ps->weaponstate == WEAPON_CHARGING_ALT && ps->weapon == WP_BLASTER_PISTOL )
+			|| (ps->weaponstate == WEAPON_CHARGING_ALT && ps->weapon == WP_IMP_PISTOL)
 			|| ( ps->weapon == WP_BOWCASTER && ps->weaponstate == WEAPON_CHARGING )
 			|| ( ps->weapon == WP_DEMP2 && ps->weaponstate == WEAPON_CHARGING_ALT ))
 	{
@@ -1708,7 +1710,8 @@ void CG_AddViewWeapon( playerState_t *ps )
 		vec3_t	WHITE	= {1.0f,1.0f,1.0f};
 
 		if ( ps->weapon == WP_BRYAR_PISTOL
-			|| ps->weapon == WP_BLASTER_PISTOL )
+			|| ps->weapon == WP_BLASTER_PISTOL
+			|| ps->weapon == WP_IMP_PISTOL )
 		{
 			// Hardcoded max charge time of 1 second
 			val = ( cg.time - ps->weaponChargeTime ) * 0.001f;
@@ -1860,6 +1863,7 @@ const char *weaponDesc[WP_NUM_WEAPONS - 1] =
 "DC15S_CARBINE_DESC",
 "DC15A_RIFLE_DESC",
 "Z6_ROTARY_DESC",
+"BLASTER_PISTOL_DESC",
 };
 
 /*
@@ -1932,6 +1936,10 @@ void CG_DrawDataPadWeaponSelect( void )
 	{
 		weaponSelectI = WP_FLECHETTE;
 	}
+	else if (cg.DataPadWeaponSelect == WP_BRYAR_PISTOL)
+	{
+		weaponSelectI = WP_SABER;
+	}
 	else
 	{
 		weaponSelectI = cg.DataPadWeaponSelect - 1;
@@ -1966,6 +1974,15 @@ void CG_DrawDataPadWeaponSelect( void )
 			weaponSelectI = WP_CONCUSSION;
 		}
 
+		if (weaponSelectI == WP_BRYAR_PISTOL)
+		{
+			weaponSelectI--;
+		}
+		else if (weaponSelectI == WP_SABER && !drewConc && cg.DataPadWeaponSelect != WP_BRYAR_PISTOL)
+		{
+			weaponSelectI = WP_BRYAR_PISTOL;
+		}
+
 		if (weaponSelectI<1)
 		{
 			weaponSelectI = WP_NUM_WEAPONS - 1;
@@ -1977,6 +1994,11 @@ void CG_DrawDataPadWeaponSelect( void )
 			{
 				drewConc = qtrue;
 				weaponSelectI = WP_ROCKET_LAUNCHER;
+			}
+			else if (weaponSelectI == WP_BRYAR_PISTOL)
+			{
+				drewConc = qtrue;
+				weaponSelectI = WP_BLASTER_PISTOL;
 			}
 			continue;
 		}
@@ -2006,6 +2028,11 @@ void CG_DrawDataPadWeaponSelect( void )
 			drewConc = qtrue;
 			weaponSelectI = WP_ROCKET_LAUNCHER;
 		}
+		else if (weaponSelectI == WP_BRYAR_PISTOL)
+		{
+			drewConc = qtrue;
+			weaponSelectI = WP_BLASTER_PISTOL;
+		}
 	}
 
 	// Current Center Icon
@@ -2032,6 +2059,10 @@ void CG_DrawDataPadWeaponSelect( void )
 	{
 		weaponSelectI = WP_ROCKET_LAUNCHER;
 	}
+	else if (cg.DataPadWeaponSelect == WP_BRYAR_PISTOL)
+	{
+		weaponSelectI = WP_BLASTER_PISTOL;
+	}
 	else
 	{
 		weaponSelectI = cg.DataPadWeaponSelect + 1;
@@ -2056,6 +2087,14 @@ void CG_DrawDataPadWeaponSelect( void )
 		{
 			weaponSelectI = WP_CONCUSSION;
 		}
+		if (weaponSelectI == WP_BRYAR_PISTOL)
+		{
+			weaponSelectI++;
+		}
+		else if (weaponSelectI == WP_BLASTER_PISTOL && !drewConc && cg.DataPadWeaponSelect != WP_BRYAR_PISTOL)
+		{
+			weaponSelectI = WP_BRYAR_PISTOL;
+		}
 		if (weaponSelectI>= WP_NUM_WEAPONS)
 		{
 			weaponSelectI = 1;
@@ -2067,6 +2106,11 @@ void CG_DrawDataPadWeaponSelect( void )
 			{
 				drewConc = qtrue;
 				weaponSelectI = WP_FLECHETTE;
+			}
+			if (weaponSelectI == WP_BRYAR_PISTOL)
+			{
+				drewConc = qtrue;
+				weaponSelectI = WP_SABER;
 			}
 			continue;
 		}
@@ -2096,6 +2140,11 @@ void CG_DrawDataPadWeaponSelect( void )
 		{
 			drewConc = qtrue;
 			weaponSelectI = WP_FLECHETTE;
+		}
+		if (weaponSelectI == WP_BRYAR_PISTOL)
+		{
+			drewConc = qtrue;
+			weaponSelectI = WP_SABER;
 		}
 	}
 
@@ -2276,6 +2325,10 @@ void CG_DrawWeaponSelect( void )
 	{
 		i = WP_FLECHETTE;
 	}
+	else if (cg.weaponSelect == WP_BRYAR_PISTOL)
+	{
+		i = WP_SABER;
+	}
 	else
 	{
 		i = cg.weaponSelect - 1;
@@ -2320,6 +2373,14 @@ void CG_DrawWeaponSelect( void )
 		{
 			i = WP_CONCUSSION;
 		}
+		if ( i == WP_BRYAR_PISTOL )
+		{
+			i--;
+		}
+		else if ( i == WP_SABER && !drewConc && cg.weaponSelect != WP_BRYAR_PISTOL)
+		{
+			i = WP_BRYAR_PISTOL;
+		}
 		if (i<1)
 		{
 			i = WP_NUM_WEAPONS;
@@ -2332,6 +2393,11 @@ void CG_DrawWeaponSelect( void )
 				drewConc = qtrue;
 				i = WP_ROCKET_LAUNCHER;
 			}
+			if (i == WP_BRYAR_PISTOL)
+			{
+				drewConc = qtrue;
+				i = WP_BLASTER_PISTOL;
+			}
 			continue;
 		}
 		if (isOnVeh)
@@ -2342,6 +2408,11 @@ void CG_DrawWeaponSelect( void )
 				{
 					drewConc = qtrue;
 					i = WP_ROCKET_LAUNCHER;
+				}
+				if (i == WP_BRYAR_PISTOL)
+				{
+					drewConc = qtrue;
+					i = WP_BLASTER_PISTOL;
 				}
 				continue;	// Don't draw anything else if on a vehicle
 			}
@@ -2371,6 +2442,11 @@ void CG_DrawWeaponSelect( void )
 			drewConc = qtrue;
 			i = WP_ROCKET_LAUNCHER;
 		}
+		if (i == WP_BRYAR_PISTOL)
+		{
+			drewConc = qtrue;
+			i = WP_BLASTER_PISTOL;
+		}
 	}
 
 	// Current Center Icon
@@ -2395,6 +2471,10 @@ void CG_DrawWeaponSelect( void )
 	if ( cg.weaponSelect == WP_CONCUSSION )
 	{
 		i = WP_ROCKET_LAUNCHER;
+	}
+	else if (cg.weaponSelect == WP_BRYAR_PISTOL)
+	{
+		i = WP_BLASTER_PISTOL;
 	}
 	else
 	{
@@ -2421,6 +2501,14 @@ void CG_DrawWeaponSelect( void )
 		{
 			i = WP_CONCUSSION;
 		}
+		if (i == WP_BRYAR_PISTOL)
+		{
+			i++;
+		}
+		else if (i == WP_BLASTER_PISTOL && !drewConc && cg.weaponSelect != WP_BRYAR_PISTOL)
+		{
+			i = WP_BRYAR_PISTOL;
+		}
 		if (i>= WP_NUM_WEAPONS)
 		{
 			i = 1;
@@ -2433,6 +2521,11 @@ void CG_DrawWeaponSelect( void )
 				drewConc = qtrue;
 				i = WP_FLECHETTE;
 			}
+			if (i == WP_BRYAR_PISTOL)
+			{
+				drewConc = qtrue;
+				i = WP_SABER;
+			}
 			continue;
 		}
 		if (isOnVeh)
@@ -2443,6 +2536,11 @@ void CG_DrawWeaponSelect( void )
 				{
 					drewConc = qtrue;
 					i = WP_FLECHETTE;
+				}
+				if (i == WP_BRYAR_PISTOL)
+				{
+					drewConc = qtrue;
+					i = WP_SABER;
 				}
 				continue;	// Don't draw anything else if on a vehicle
 			}
@@ -2472,6 +2570,11 @@ void CG_DrawWeaponSelect( void )
 		{
 			drewConc = qtrue;
 			i = WP_FLECHETTE;
+		}
+		if (i == WP_BRYAR_PISTOL)
+		{
+			drewConc = qtrue;
+			i = WP_SABER;
 		}
 	}
 
@@ -2672,9 +2775,21 @@ void CG_NextWeapon_f( void ) {
 		{
 			cg.weaponSelect = WP_ROCKET_LAUNCHER;
 		}
+		else if (cg.weaponSelect == WP_SABER)
+		{
+			cg.weaponSelect = WP_BRYAR_PISTOL;
+		}
+		else if (cg.weaponSelect == WP_BRYAR_PISTOL)
+		{
+			cg.weaponSelect = WP_BLASTER_PISTOL;
+		}
 		else if ( cg.weaponSelect == WP_DET_PACK )
 		{
 			cg.weaponSelect = WP_MELEE;
+		}
+		else if (cg.weaponSelect == WP_STUN_BATON)
+		{
+			cg.weaponSelect = WP_EMPLACED_GUN;
 		}
 		else
 		{
@@ -2728,9 +2843,21 @@ void CG_DPNextWeapon_f( void ) {
 		{
 			cg.DataPadWeaponSelect = WP_ROCKET_LAUNCHER;
 		}
+		else if (cg.DataPadWeaponSelect == WP_SABER)
+		{
+			cg.DataPadWeaponSelect = WP_BRYAR_PISTOL;
+		}
+		else if (cg.DataPadWeaponSelect == WP_BRYAR_PISTOL)
+		{
+			cg.DataPadWeaponSelect = WP_BLASTER_PISTOL;
+		}
 		else if ( cg.DataPadWeaponSelect == WP_DET_PACK )
 		{
 			cg.DataPadWeaponSelect = WP_MELEE;
+		}
+		else if (cg.DataPadWeaponSelect == WP_STUN_BATON)
+		{
+			cg.DataPadWeaponSelect = WP_EMPLACED_GUN;
 		}
 		else
 		{
@@ -2786,9 +2913,21 @@ void CG_DPPrevWeapon_f( void )
 		{
 			cg.DataPadWeaponSelect = WP_FLECHETTE;
 		}
+		else if (cg.DataPadWeaponSelect == WP_BLASTER_PISTOL)
+		{
+			cg.DataPadWeaponSelect = WP_BRYAR_PISTOL;
+		}
+		else if (cg.DataPadWeaponSelect == WP_BRYAR_PISTOL)
+		{
+			cg.DataPadWeaponSelect = WP_SABER;
+		}
 		else if ( cg.DataPadWeaponSelect == WP_MELEE )
 		{
 			cg.DataPadWeaponSelect = WP_DET_PACK;
+		}
+		else if (cg.DataPadWeaponSelect == WP_EMPLACED_GUN)
+		{
+			cg.DataPadWeaponSelect = WP_STUN_BATON;
 		}
 		else
 		{
@@ -2875,9 +3014,21 @@ void CG_PrevWeapon_f( void ) {
 		{
 			cg.weaponSelect = WP_FLECHETTE;
 		}
+		else if (cg.weaponSelect == WP_BLASTER_PISTOL)
+		{
+			cg.weaponSelect = WP_BRYAR_PISTOL;
+		}
+		else if (cg.weaponSelect == WP_BRYAR_PISTOL)
+		{
+			cg.weaponSelect = WP_SABER;
+		}
 		else if ( cg.weaponSelect == WP_MELEE )
 		{
 			cg.weaponSelect = WP_DET_PACK;
+		}
+		else if (cg.weaponSelect == WP_EMPLACED_GUN)
+		{
+			cg.weaponSelect = WP_STUN_BATON;
 		}
 		else
 		{
@@ -3400,6 +3551,7 @@ void CG_MissileHitWall( centity_t *cent, int weapon, vec3_t origin, vec3_t dir, 
 	{
 	case WP_BRYAR_PISTOL:
 	case WP_BLASTER_PISTOL:
+	case WP_IMP_PISTOL:
 	case WP_JAWA:
 		if ( altFire )
 		{
@@ -3561,6 +3713,7 @@ void CG_MissileHitPlayer( centity_t *cent, int weapon, vec3_t origin, vec3_t dir
 	{
 	case WP_BRYAR_PISTOL:
 	case WP_BLASTER_PISTOL:
+	case WP_IMP_PISTOL:
 	case WP_JAWA:
 		if ( altFire )
 		{

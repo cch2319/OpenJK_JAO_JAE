@@ -998,6 +998,10 @@ qboolean G_StandardHumanoid( gentity_t *self )
 		{//only _humanoid skeleton is expected to have these
 			return qtrue;
 		}
+		if (!Q_stricmp("models/players/JK2anims/JK2anims", GLAName))
+		{//JK2animation duplicates many of these
+			return qtrue;
+		}
 		if ( !Q_stricmp( "models/players/protocol/protocol", GLAName ) )
 		{//protocol droid duplicates many of these
 			return qtrue;

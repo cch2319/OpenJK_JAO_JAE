@@ -1199,11 +1199,13 @@ static void Jedi_AdjustSaberAnimLevel( gentity_t *self, int newLevel )
 	}
 	if ( newLevel < SS_FAST )
 	{
-		newLevel = SS_FAST;
+		Jedi_AdjustSaberAnimLevel(NPC, Q_irand(SS_FAST, SS_TAVION));
+		//newLevel = SS_FAST;
 	}
 	else if ( newLevel > SS_STAFF )
 	{
-		newLevel = SS_STAFF;
+		Jedi_AdjustSaberAnimLevel(NPC, Q_irand(SS_FAST, SS_TAVION));
+		//newLevel = SS_STAFF;
 	}
 	//use the different attacks, how often they switch and under what circumstances
 	if ( !(self->client->ps.saberStylesKnown&(1<<newLevel)) )
@@ -1239,7 +1241,8 @@ static void Jedi_CheckDecreaseSaberAnimLevel( void )
 		if ( TIMER_Done( NPC, "saberLevelDebounce" ) && !Q_irand( 0, 10 ) )
 		{
 			//Jedi_AdjustSaberAnimLevel( NPC, (NPC->client->ps.saberAnimLevel-1) );//drop
-			Jedi_AdjustSaberAnimLevel( NPC, Q_irand( SS_FAST, SS_STRONG ));//random
+			//Jedi_AdjustSaberAnimLevel(NPC, Q_irand(SS_FAST, SS_STRONG));//random
+			Jedi_AdjustSaberAnimLevel( NPC, Q_irand( SS_FAST, SS_TAVION ));//random
 			TIMER_Set( NPC, "saberLevelDebounce", Q_irand( 3000, 10000 ) );
 		}
 	}
@@ -5009,6 +5012,7 @@ static void Jedi_CombatTimersUpdate( int enemy_dist )
 			case WP_BLASTER:
 			case WP_BRYAR_PISTOL:
 			case WP_BLASTER_PISTOL:
+			case WP_IMP_PISTOL:
 			case WP_DISRUPTOR:
 			case WP_BOWCASTER:
 			case WP_REPEATER:
@@ -6056,7 +6060,7 @@ void NPC_Jedi_Pain( gentity_t *self, gentity_t *inflictor, gentity_t *other, con
 		}
 		if ( !Q_irand( 0, 3 ) )
 		{//ouch... maybe switch up which saber power level we're using
-			Jedi_AdjustSaberAnimLevel( self, Q_irand( SS_FAST, SS_STRONG ) );
+			Jedi_AdjustSaberAnimLevel( self, Q_irand( SS_FAST, SS_TAVION ) );
 		}
 		if ( !Q_irand( 0, 1 ) )//damage > 20 || self->health < 40 ||
 		{

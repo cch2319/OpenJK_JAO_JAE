@@ -1898,6 +1898,17 @@ static void PlayCinematic(const char *arg, const char *s, qboolean qbInGame)
 #endif
 			bits |= CIN_hold;
 		}
+		else if (!Q_stricmp(arg,"video/jk0101_sw_old.roq"))
+		{
+			psAudioFile = "music/cinematic_1";
+			hCrawl = re.RegisterShaderNoMip( "menu/video/tc_8" );
+			if (!hCrawl)
+			{
+				hCrawl = re.RegisterShaderNoMip("menu/video/tc_engl");//failed, so go back to english
+			}
+			
+			bits |= CIN_hold;
+		}
 		else
 		if (bIsForeign)
 		{

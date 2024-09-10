@@ -649,7 +649,7 @@ void G_InitCvars( void ) {
 
 	// change anytime vars
 	g_speed = gi.cvar( "g_speed", "250", CVAR_CHEAT );
-	g_gravity = gi.cvar( "g_gravity", "800", CVAR_SAVEGAME|CVAR_ROM );
+	g_gravity = gi.cvar( "g_gravity", "800", CVAR_SAVEGAME|CVAR_NORESTART );
 	g_stepSlideFix = gi.cvar( "g_stepSlideFix", "1", CVAR_ARCHIVE );
 	g_sex = gi.cvar ("sex", "f", CVAR_USERINFO | CVAR_ARCHIVE|CVAR_SAVEGAME|CVAR_NORESTART );
 	g_spskill = gi.cvar ("g_spskill", "0", CVAR_ARCHIVE | CVAR_SAVEGAME|CVAR_NORESTART);
@@ -1504,6 +1504,10 @@ static inline qboolean G_RagWantsHumanoidsOnly( CGhoul2Info *ghlInfo )
 
 	if ( !Q_stricmp( "models/players/_humanoid/_humanoid", GLAName ) )
 	{//only _humanoid skeleton is expected to have these
+		return qtrue;
+	}
+	if (!Q_stricmp("models/players/JK2anims/JK2anims", GLAName))
+	{//only JK2anims skeleton is expected to have these
 		return qtrue;
 	}
 

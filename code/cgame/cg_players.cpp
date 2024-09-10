@@ -9835,6 +9835,7 @@ Ghoul2 Insert End
 
 		if (( ps->weaponstate == WEAPON_CHARGING_ALT && ps->weapon == WP_BRYAR_PISTOL )
 			|| ( ps->weaponstate == WEAPON_CHARGING_ALT && ps->weapon == WP_BLASTER_PISTOL )
+			|| (ps->weaponstate == WEAPON_CHARGING_ALT && ps->weapon == WP_IMP_PISTOL)
 			|| ( ps->weapon == WP_BOWCASTER && ps->weaponstate == WEAPON_CHARGING )
 			|| ( ps->weapon == WP_DEMP2 && ps->weaponstate == WEAPON_CHARGING_ALT ))
 		{
@@ -9843,7 +9844,8 @@ Ghoul2 Insert End
 			vec3_t	WHITE	= {1.0f,1.0f,1.0f};
 
 			if ( ps->weapon == WP_BRYAR_PISTOL
-				|| ps->weapon == WP_BLASTER_PISTOL )
+				|| ps->weapon == WP_BLASTER_PISTOL
+				|| ps->weapon == WP_IMP_PISTOL )
 			{
 				// Hardcoded max charge time of 1 second
 				val = ( cg.time - ps->weaponChargeTime ) * 0.001f;
